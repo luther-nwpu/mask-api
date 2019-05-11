@@ -1,0 +1,22 @@
+{
+	"apps": [{
+		"name": "blog-api",
+		"script": "dist/app.js",
+		"exec_mode"  : "cluster",
+		"instances": 0,
+		"node_args": "--harmony -r ./dist/bootstrap.js",
+		"watch": false,
+		"log_date_format": "YYYY-MM-DD HH:mm:ss",
+		"env": {
+			"NODE_ENV": "production",
+			"DB_HOST": "localhost",
+			"DB_PORT": "3306",
+			"DB_USER": "root",
+			"DB_PASS": "root",
+			"DB_NAME": "mask",
+			"DB_CHAR": "utf8mb4",
+			"REDIS_HOST": "localhost",
+			"JWT_SECRET": "Npu2015303320"
+		}
+	}]
+}

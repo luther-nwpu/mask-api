@@ -1,0 +1,25 @@
+{
+    "restartable": "rs",
+    "ignore": [
+        ".git",
+        "node_modules/**/node_modules"
+    ],
+    "verbose": true,
+    "execMap": {
+        "js": "node --harmony",
+        "ts": "ts-node -r tsconfig-paths/register"
+    },
+    "env": {
+        "NODE_ENV": "development",
+        "DEBUG": "*,-nodemon:*,-nodemon,-knex:pool",
+        "DB_HOST": "localhost",
+        "DB_PORT": "3306",
+        "DB_USER": "root",
+        "DB_PASS": "root",
+        "DB_NAME": "mask",
+        "DB_CHAR": "utf8mb4",
+        "REDIS_HOST": "localhost",
+        "JWT_SECRET": "Npu2015303320"
+    },
+    "ext": "js json ts"
+}
