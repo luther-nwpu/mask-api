@@ -6,7 +6,13 @@ export const Haiyou = db.Model.extend({
     picture: function () {
         return this.belongsTo(Picture, 'picture_id', 'id')
     }
-}) as typeof db.Model
+}, {
+    getHaiyou: async (id) => {
+        return new Haiyou({ id }).fetch().then((result) => {
+            return result
+        })
+    }
+}) as any
 /**
  * `id` int(11) NOT NULL AUTO_INCREMENT,
  * `video_id` varchar(45) DEFAULT NULL,

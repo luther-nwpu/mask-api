@@ -9,8 +9,12 @@ import barrageRouter from './barrage'
 import chatRouter from './chat'
 import commentRouter from './comment'
 import videoRouter from './video'
+import historyRouter from './history'
+import subscriberRouter from './subscribe'
 
 export {
+    historyRouter,
+    subscriberRouter,
     videoRouter,
     commentRouter,
     chatRouter,

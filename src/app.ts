@@ -8,7 +8,7 @@ import * as FileKoaBody from 'koa-body'
 import { PORT, IS_PROD, DEBUG_NAMESPACE } from '@config'
 import { jwtMiddleware, errorCatcher } from '@middlewares'
 import WebSocket from '@websocket'
-import { authRouter, adminRouter, commonRouter, uploadRouter, draftsRouter, haiyouRouter, socketRouter, barrageRouter, chatRouter, commentRouter, videoRouter } from '@routes'
+import { authRouter, adminRouter, historyRouter, subscriberRouter, commonRouter, uploadRouter, draftsRouter, haiyouRouter, socketRouter, barrageRouter, chatRouter, commentRouter, videoRouter } from '@routes'
 import * as path from 'path'
 
 const app = new Koa()
@@ -51,6 +51,10 @@ app
     .use(commentRouter.allowedMethods())
     .use(videoRouter.routes())
     .use(videoRouter.allowedMethods())
+    .use(historyRouter.routes())
+    .use(historyRouter.allowedMethods())
+    .use(subscriberRouter.routes())
+    .use(subscriberRouter.allowedMethods())
 const server = createServer(app.callback())
 
 WebSocket({ server })
