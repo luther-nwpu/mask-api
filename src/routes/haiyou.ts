@@ -50,12 +50,11 @@ router.get('/getHaiyouById', async (ctx, next) => {
     const haiyouId = ctx.request.query.haiyouId
     const [result, error] = await tryCatch(new Promise(async (resolve, reject) => {
         new Haiyou({ id: haiyouId }).fetch({ withRelated: ['picture'] }).then(async (result) => {
-            result.set('videoArr', await result.get('video_id').split('_').reduce(async (total, value) => {
+            result.save('hot', result.get('hot') + 1)
+            resolve({videoArr: await result.get('video_id').split('_').reduce(async (total, value) => {
                 total.push(await Video.getVideo(value))
                 return total
-            }, []))
-            result.set('user', await User.getUser(result.get('user_id')))
-            resolve(result)
+            }, []), user: await User.getUser(result.get('user_id')), ...result.toJSON()})
         })
     }))
     if (error) {
