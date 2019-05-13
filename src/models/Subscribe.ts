@@ -11,6 +11,16 @@ export const Subscribe = db.Model.extend({
                 return { suser, ...(value.toJSON()) }
             }))
         })
+    },
+    subscribeUser: async (userId, suserId) => {
+        return new Subscribe({ user_id: userId, suser_id: suserId }).save(null, { method: 'insert' }).then(async (model) => {
+            return model
+        })
+    },
+    deleteSubscribe: async (id) => {
+        return new Subscribe({ id }).destroy().then((model) => {
+            return model
+        })
     }
 }) as any
 /**
