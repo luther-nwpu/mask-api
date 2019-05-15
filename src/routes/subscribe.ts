@@ -34,8 +34,10 @@ router.post('/subscribeUser', async (ctx, next) => {
 
 router.post('/unSubscribeUser', async (ctx, next) => {
     const { subscriberId } = ctx.request.body
+    const userId = ctx.state['$user'].data
     const [result, error] = await tryCatch(new Promise(async (resolve, reject) => {
-        resolve(await Subscribe.deleteSubscribe(subscriberId))
+        await Subscribe.deleteSubscribe(subscriberId)
+        resolve(await Subscribe.getAllSubscribeByUserId(userId))
     }))
     if (error) {
         return ctx.body = { success: false, result: error }

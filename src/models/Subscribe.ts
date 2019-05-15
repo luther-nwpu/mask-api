@@ -8,7 +8,8 @@ export const Subscribe = db.Model.extend({
         return new Subscribe().where('user_id', id).fetchAll().then((model) => {
             return Promise.all(model.map(async (value) => {
                 const suser = await User.getUser(value.get('suser_id'))
-                return { suser, ...(value.toJSON()) }
+                const subscribeCount = await Subscribe.getSubScribeCount(value.get('suser_id'))
+                return { suser, subscribeCount, ...(value.toJSON()) }
             }))
         })
     },
