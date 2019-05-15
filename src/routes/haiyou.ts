@@ -1,6 +1,8 @@
 import * as koaRouter from 'koa-router'
 import { tryCatch } from '@libs/util'
-import { Draft, Haiyou, Video, User } from '@models'
+import { Draft, Haiyou, Video, User, Subscribe } from '@models'
+import { JWT_SECRET } from '@config'
+import { verify } from 'jsonwebtoken'
 const router = new koaRouter()
 
 router.prefix('/api/haiyou')
@@ -47,6 +49,21 @@ router.get('/getAllHaiyouByUserId', async (ctx, next) => {
 })
 
 router.get('/getHaiyouById', async (ctx, next) => {
+    const token = ctx.header.authorization as string || decodeURIComponent(ctx.cookies.get('Authorization')) as string
+    // token invalid
+    let payload
+    if (!token) {
+        payload = 0
+    }
+    try {
+        if (token.split(' ').length === 2 && token.split(' ')[0] === 'Bearer') {
+            payload = verify(token.split(' ')[1], JWT_SECRET)['data']
+        } else {
+            payload = 0
+        }
+    } catch (e) {
+        payload = 0
+    }
     const haiyouId = ctx.request.query.haiyouId
     const [result, error] = await tryCatch(new Promise(async (resolve, reject) => {
         new Haiyou({ id: haiyouId }).fetch({ withRelated: ['picture'] }).then(async (result) => {
@@ -54,7 +71,7 @@ router.get('/getHaiyouById', async (ctx, next) => {
             resolve({videoArr: await result.get('video_id').split('_').reduce(async (total, value) => {
                 total.push(await Video.getVideo(value))
                 return total
-            }, []), user: await User.getUser(result.get('user_id')), ...result.toJSON()})
+            }, []), subscribe: await Subscribe.judgeSubscribe(payload, result.get('user_id')), followNum: await Subscribe.getSubScribeCount(result.get('user_id')), user: await User.getUser(result.get('user_id')), ...result.toJSON()})
         })
     }))
     if (error) {

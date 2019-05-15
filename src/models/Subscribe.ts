@@ -21,6 +21,16 @@ export const Subscribe = db.Model.extend({
         return new Subscribe({ id }).destroy().then((model) => {
             return model
         })
+    },
+    judgeSubscribe: async (userId, suserId) => {
+        return new Subscribe({ user_id: userId, suser_id: suserId }).fetch().then((model) => {
+            return model
+        })
+    },
+    getSubScribeCount: async (suserId) => {
+        return new Subscribe({ suser_id: suserId }).count().then((count) => {
+            return count
+        })
     }
 }) as any
 /**
