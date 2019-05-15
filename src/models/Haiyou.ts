@@ -8,7 +8,7 @@ export const Haiyou = db.Model.extend({
     }
 }, {
     getHaiyou: async (id) => {
-        return new Haiyou({ id }).fetch().then((result) => {
+        return new Haiyou({ id }).fetch({ withRelated: ['picture'] }).then((result) => {
             return result
         })
     }

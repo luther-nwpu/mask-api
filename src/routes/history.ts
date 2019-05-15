@@ -16,4 +16,17 @@ router.get('/getAllHistoryByMe', async (ctx, next) => {
     return ctx.body = { success: true, result }
 })
 
+router.post('/deleteHistoryById', async (ctx, next) => {
+    const { id } = ctx.request.body
+    const userId = ctx.state['$user'].data
+    const [result, error] = await tryCatch(new Promise(async (resolve, reject) => {
+        await History.deleteHistory(id)
+        resolve(await History.getAllHistoryByUserId(userId))
+    }))
+    if (error) {
+        return ctx.body = { success: false, result: error }
+    }
+    return ctx.body = { success: true, result }
+})
+
 export default router

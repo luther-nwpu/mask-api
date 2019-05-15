@@ -21,6 +21,11 @@ export const History = db.Model.extend({
                 model.save()
             }
         })
+    },
+    deleteHistory: async (id) => {
+        return new History({ id }).destroy().then((model) => {
+            return model
+        })
     }
 }) as any
 /**
