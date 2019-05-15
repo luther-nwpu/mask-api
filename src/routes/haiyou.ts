@@ -1,6 +1,6 @@
 import * as koaRouter from 'koa-router'
 import { tryCatch } from '@libs/util'
-import { Draft, Haiyou, Video, User, Subscribe } from '@models'
+import { Draft, Haiyou, Video, User, Subscribe, History } from '@models'
 import { JWT_SECRET } from '@config'
 import { verify } from 'jsonwebtoken'
 const router = new koaRouter()
@@ -67,6 +67,9 @@ router.get('/getHaiyouById', async (ctx, next) => {
     const haiyouId = ctx.request.query.haiyouId
     const [result, error] = await tryCatch(new Promise(async (resolve, reject) => {
         new Haiyou({ id: haiyouId }).fetch({ withRelated: ['picture'] }).then(async (result) => {
+            if (payload !== 0) {
+                History.saveHistory(payload, haiyouId)
+            }
             result.save('hot', result.get('hot') + 1)
             resolve({videoArr: await result.get('video_id').split('_').reduce(async (total, value) => {
                 total.push(await Video.getVideo(value))
