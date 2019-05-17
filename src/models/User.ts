@@ -10,7 +10,7 @@ export const User = db.Model.extend({
 }, {
     getUser: Promise.method((id) => {
         return new User({ id }).fetch({ withRelated: ['picture'] }).then((result) => {
-            return result.omit('password')
+            return result && result.omit('password')
         })
     })
 }) as any

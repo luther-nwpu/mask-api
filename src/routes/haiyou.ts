@@ -36,16 +36,37 @@ router.get('/getAllHaiyou', async (ctx, next) => {
 })
 
 router.get('/getAllHaiyouByUserId', async (ctx, next) => {
+    const token = ctx.header.authorization as string || decodeURIComponent(ctx.cookies.get('Authorization')) as string
+    // token invalid
+    let payload
+    if (!token) {
+        payload = 0
+    }
+    try {
+        if (token.split(' ').length === 2 && token.split(' ')[0] === 'Bearer') {
+            payload = verify(token.split(' ')[1], JWT_SECRET)['data']
+        } else {
+            payload = 0
+        }
+    } catch (e) {
+        payload = 0
+    }
     const userId = ctx.request.query.userId
-    const [result, error] = await tryCatch(new Promise(async (resolve, reject) => {
+    const [haiyous, error] = await tryCatch(new Promise(async (resolve, reject) => {
         new Haiyou().where({ user_id: parseInt(userId, 10) }).fetchAll({ withRelated: ['picture'] }).then((result) => {
             resolve(result)
         })
     }))
-    if (error) {
+    const [subscribe, error1] = await tryCatch(new Promise(async (resolve, reject) => {
+        resolve(await Subscribe.judgeSubscribe(payload, userId))
+    }))
+    const [user, error2] = await tryCatch(new Promise(async (resolve, reject) => {
+        resolve(await User.getUser(userId))
+    }))
+    if (error && error1 && error2) {
         return ctx.body = { success: false, result: error }
     }
-    return ctx.body = { success: true, result }
+    return ctx.body = { success: true, result: { haiyous, subscribe, user } }
 })
 
 router.get('/getHaiyouById', async (ctx, next) => {
