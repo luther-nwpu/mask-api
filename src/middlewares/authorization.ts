@@ -22,7 +22,8 @@ export const jwtMiddleware = [
             'GET:/haiyou/getHaiyouById',
             'GET:/haiyou/getAllHaiyouByUserId',
             'GET:/comment/getAllCommentsByHaiyouId',
-            'GET:/video/getVideoByVideoId'
+            'GET:/video/getVideoByVideoId',
+            'GET:/barrage/getAllBarrageByVideoId'
         ]
     }),
 
