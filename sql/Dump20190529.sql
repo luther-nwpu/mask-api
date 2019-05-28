@@ -1,4 +1,4 @@
-CREATE DATABASE  IF NOT EXISTS `mask` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8_general_ci  */;
+CREATE DATABASE  IF NOT EXISTS `mask` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci  */;
 USE `mask`;
 -- MySQL dump 10.13  Distrib 8.0.14, for Win64 (x86_64)
 --
@@ -23,7 +23,7 @@ USE `mask`;
 
 DROP TABLE IF EXISTS `barrages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `barrages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `key` varchar(45) DEFAULT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE `barrages` (
   KEY `user_id_idx` (`user_id`),
   CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
   CONSTRAINT `video_id` FOREIGN KEY (`video_id`) REFERENCES `video` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb4 COLLATE=utf8_general_ci ;
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -59,7 +59,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `chat`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `chat` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
@@ -69,7 +69,7 @@ CREATE TABLE `chat` (
   `update_at` timestamp NULL DEFAULT NULL,
   `is_read` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8_general_ci ;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -88,7 +88,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `comments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `comments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `content` text,
@@ -98,7 +98,7 @@ CREATE TABLE `comments` (
   `support` text,
   `haiyou_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8_general_ci ;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -117,7 +117,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `drafts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `drafts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `video_id` text,
@@ -133,7 +133,7 @@ CREATE TABLE `drafts` (
   `user_id` int(11) DEFAULT NULL,
   `select_picture` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8_general_ci ;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -152,7 +152,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `haiyous`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `haiyous` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `video_id` varchar(45) DEFAULT NULL,
@@ -171,7 +171,7 @@ CREATE TABLE `haiyous` (
   KEY `picture_id_idx` (`picture_id`),
   KEY `user_id_idx` (`user_id`),
   CONSTRAINT `picture_id` FOREIGN KEY (`picture_id`) REFERENCES `picture` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8_general_ci ;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -190,7 +190,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `history`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `history` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
@@ -198,7 +198,7 @@ CREATE TABLE `history` (
   `create_at` timestamp NULL DEFAULT NULL,
   `update_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8_general_ci ;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -217,7 +217,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `notify`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `notify` (
   `id` int(11) NOT NULL,
   `userid` int(11) DEFAULT NULL,
@@ -228,7 +228,7 @@ CREATE TABLE `notify` (
   `update_at` timestamp NULL DEFAULT NULL,
   `haiyouid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8_general_ci ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -246,7 +246,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `picture`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `picture` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `url` text,
@@ -256,7 +256,7 @@ CREATE TABLE `picture` (
   `update_at` timestamp NULL DEFAULT NULL,
   `user_id` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=187 DEFAULT CHARSET=utf8mb4 COLLATE=utf8_general_ci ;
+) ENGINE=InnoDB AUTO_INCREMENT=187 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -275,7 +275,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `subcomments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `subcomments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `comment_id` int(11) DEFAULT NULL,
@@ -287,7 +287,7 @@ CREATE TABLE `subcomments` (
   `support` text,
   PRIMARY KEY (`id`),
   KEY `user_id_idx` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8_general_ci ;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -306,7 +306,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `subscribe`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `subscribe` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
@@ -314,7 +314,7 @@ CREATE TABLE `subscribe` (
   `create_at` timestamp NULL DEFAULT NULL,
   `update_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8_general_ci ;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -333,7 +333,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(45) NOT NULL,
@@ -349,7 +349,7 @@ CREATE TABLE `user` (
   `sex` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`,`email`),
   KEY `picture_id_idx` (`picture_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8_general_ci ;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -368,7 +368,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `video`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
+ SET character_set_client = utf8 ;
 CREATE TABLE `video` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `url` varchar(45) DEFAULT NULL,
@@ -379,7 +379,7 @@ CREATE TABLE `video` (
   `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id_idx` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8_general_ci ;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
