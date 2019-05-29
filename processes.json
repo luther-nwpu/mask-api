@@ -9,13 +9,13 @@
 		"log_date_format": "YYYY-MM-DD HH:mm:ss",
 		"env": {
 			"NODE_ENV": "production",
-			"DB_HOST": "129.28.153.58",
+			"DB_HOST": "localhost",
 			"DB_PORT": "3306",
 			"DB_USER": "root",
 			"DB_PASS": "Npu2015303320!",
 			"DB_NAME": "mask",
 			"DB_CHAR": "utf8mb4",
-			"REDIS_HOST": "129.28.153.58",
+			"REDIS_HOST": "localhost",
 			"JWT_SECRET": "Npu2015303320"
 		}
 	}]
