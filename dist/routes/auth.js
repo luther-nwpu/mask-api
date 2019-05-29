@@ -1,0 +1,171 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const koaRouter = require("koa-router");
+const _models_1 = require("@models");
+const redis_1 = require("@libs/redis");
+const util_1 = require("@libs/util");
+const email_1 = require("@libs/email");
+const router = new koaRouter();
+router.prefix('/api/auth');
+router.post('/login', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
+    const body = ctx.request.body;
+    const email = body.email;
+    const password = util_1.sha256(body.password);
+    const [res, error] = yield util_1.tryCatch(new Promise((resolve, reject) => {
+        new _models_1.User({ email, password }).fetch({ withRelated: ['picture'] }).then((result) => {
+            result ? resolve(JSON.parse(JSON.stringify(result))) : resolve(null);
+        });
+    }));
+    if (error) {
+        return ctx.body = { success: false, result: error };
+    }
+    if (res) {
+        const userinfo = {
+            username: res['username'],
+            email: res['email'],
+            location: res['location'],
+            signature: res['signature'],
+            picture_url: res['picture'] && res['picture']['url'],
+            sex: res['sex'],
+            age: res['age'],
+            telephone: res['telephone']
+        };
+        return ctx.body = { success: true, result: { token: util_1.signForToken(res['id']), userinfo: userinfo } };
+    }
+    return ctx.body = { success: false, result: { message: '没有该用户' } };
+}));
+router.post('/register', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
+    const body = ctx.request.body;
+    const email = body.email;
+    const checkcode = body.checkcode;
+    const [res, error] = yield util_1.tryCatch(new Promise((resolve, reject) => {
+        redis_1.default.get(email, (err, result) => {
+            err ? reject(err) : resolve(result);
+        });
+    }));
+    if (error || res !== checkcode) {
+        return ctx.body = { success: false, result: { id: 'register-checkcode', message: '验证码无效' } };
+    }
+    const [res0, error0] = yield util_1.tryCatch(new Promise((resolve, reject) => {
+        new _models_1.User({ email: email }).fetch().then((result) => {
+            if (result) {
+                resolve(true);
+            }
+            else {
+                resolve(false);
+            }
+        });
+    }));
+    const password = util_1.sha256(body.password);
+    if (error) {
+        return ctx.body = { success: false, result: error };
+    }
+    if (res0) {
+        return ctx.body = { success: false, result: { id: 'register-username', message: '用户已经注册' } };
+    }
+    const [res2, error2] = yield util_1.tryCatch(new Promise((resolve, reject) => {
+        new _models_1.User({ email: email, password: password, username: '好嗨哟' }).save().then((model) => {
+            resolve(model);
+        });
+    }));
+    if (error2) {
+        throw new Error('内部服务器错误');
+    }
+    return ctx.body = { success: true, result: { message: '成功' } };
+}));
+router.get('/test', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
+    return ctx.body = { success: true };
+}));
+router.post('/sendEmail', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
+    const body = ctx.request.body;
+    yield email_1.sendEmail(body.email);
+    return ctx.body = { success: true };
+}));
+router.post('/updateNickName', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
+    const userId = ctx.state['$user'].data;
+    const nickName = ctx.request.body.nickName;
+    const [res, error] = yield util_1.tryCatch(new Promise((resolve, reject) => {
+        new _models_1.User({ id: userId, username: nickName }).save(null, { mode: 'update' }).then((result) => __awaiter(this, void 0, void 0, function* () {
+            resolve(yield _models_1.User.getUser(userId));
+        }));
+    }));
+    if (error) {
+        return ctx.body = { success: false, result: error };
+    }
+    if (res) {
+        const userinfo = {
+            username: res['username'],
+            email: res['email'],
+            location: res['location'],
+            signature: res['signature'],
+            picture_url: res['picture'] && res['picture']['url'],
+            sex: res['sex'],
+            age: res['age'],
+            telephone: res['telephone']
+        };
+        return ctx.body = { success: true, result: { userinfo: userinfo } };
+    }
+    return ctx.body = { success: false, result: { message: '未知错误' } };
+}));
+router.post('/updateUserInfo', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
+    const userId = ctx.state['$user'].data;
+    const { location, age, sex, signature } = ctx.request.body;
+    const [res, error] = yield util_1.tryCatch(new Promise((resolve, reject) => {
+        new _models_1.User({ id: userId, location, age, sex, signature }).save(null, { mode: 'update' }).then((result) => __awaiter(this, void 0, void 0, function* () {
+            resolve(yield _models_1.User.getUser(userId));
+        }));
+    }));
+    if (error) {
+        return ctx.body = { success: false, result: error };
+    }
+    if (res) {
+        const userinfo = {
+            username: res['username'],
+            email: res['email'],
+            location: res['location'],
+            signature: res['signature'],
+            picture_url: res['picture'] && res['picture']['url'],
+            sex: res['sex'],
+            age: res['age'],
+            telephone: res['telephone']
+        };
+        return ctx.body = { success: true, result: { userinfo: userinfo } };
+    }
+    return ctx.body = { success: false, result: { message: '未知错误' } };
+}));
+router.post('/updateAvator', (ctx, next) => __awaiter(this, void 0, void 0, function* () {
+    const userId = ctx.state['$user'].data;
+    const avatorId = ctx.request.body.avatorId;
+    const [res, error] = yield util_1.tryCatch(new Promise((resolve, reject) => {
+        new _models_1.User({ id: userId, picture_id: avatorId }).save(null, { mode: 'update' }).then((result) => __awaiter(this, void 0, void 0, function* () {
+            resolve(yield _models_1.User.getUser(userId));
+        }));
+    }));
+    if (error) {
+        return ctx.body = { success: false, result: error };
+    }
+    if (res) {
+        const userinfo = {
+            username: res['username'],
+            email: res['email'],
+            location: res['location'],
+            signature: res['signature'],
+            picture_url: res['picture'] && res['picture']['url'],
+            sex: res['sex'],
+            age: res['age'],
+            telephone: res['telephone']
+        };
+        return ctx.body = { success: true, result: { userinfo: userinfo } };
+    }
+    return ctx.body = { success: false, result: { message: '未知错误' } };
+}));
+exports.default = router;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXV0aC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9yb3V0ZXMvYXV0aC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7O0FBQUEsd0NBQXVDO0FBQ3ZDLHFDQUE4QjtBQUM5Qix1Q0FBK0I7QUFDL0IscUNBQTJEO0FBQzNELHVDQUF1QztBQUN2QyxNQUFNLE1BQU0sR0FBRyxJQUFJLFNBQVMsRUFBRSxDQUFBO0FBRTlCLE1BQU0sQ0FBQyxNQUFNLENBQUMsV0FBVyxDQUFDLENBQUE7QUFFMUIsTUFBTSxDQUFDLElBQUksQ0FBQyxRQUFRLEVBQUUsQ0FBTyxHQUFHLEVBQUUsSUFBSSxFQUFFLEVBQUU7SUFDdEMsTUFBTSxJQUFJLEdBQUcsR0FBRyxDQUFDLE9BQU8sQ0FBQyxJQUFJLENBQUE7SUFDN0IsTUFBTSxLQUFLLEdBQUcsSUFBSSxDQUFDLEtBQUssQ0FBQTtJQUN4QixNQUFNLFFBQVEsR0FBRyxhQUFNLENBQUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyxDQUFBO0lBQ3RDLE1BQU0sQ0FBQyxHQUFHLEVBQUUsS0FBSyxDQUFDLEdBQUcsTUFBTSxlQUFRLENBQUMsSUFBSSxPQUFPLENBQUMsQ0FBQyxPQUFPLEVBQUUsTUFBTSxFQUFFLEVBQUU7UUFDaEUsSUFBSSxjQUFJLENBQUMsRUFBRSxLQUFLLEVBQUUsUUFBUSxFQUFFLENBQUMsQ0FBQyxLQUFLLENBQUMsRUFBRSxXQUFXLEVBQUUsQ0FBQyxTQUFTLENBQUMsRUFBRSxDQUFDLENBQUMsSUFBSSxDQUFDLENBQUMsTUFBTSxFQUFFLEVBQUU7WUFDOUUsTUFBTSxDQUFDLENBQUMsQ0FBQyxPQUFPLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxJQUFJLENBQUMsU0FBUyxDQUFDLE1BQU0sQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsT0FBTyxDQUFDLElBQUksQ0FBQyxDQUFBO1FBQ3hFLENBQUMsQ0FBQyxDQUFBO0lBQ04sQ0FBQyxDQUFDLENBQUMsQ0FB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
