@@ -12,7 +12,6 @@ export const jwtMiddleware = [
             'POST:/auth/sendEmail',
             'POST:/auth/register',
             'POST:/auth/login',
-            'GET:/blog/getAllArticles',
             'POST:/admin/commitArticle',
             'POST:/admin/addArticle',
             'POST:/admin/editArticle',
