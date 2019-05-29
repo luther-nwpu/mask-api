@@ -15,7 +15,7 @@ export const returnVideoImg = (videoUrl) => {
             // Will take screens at 20%, 40%, 60% and 80% of the video
             count: 5,
             filename: '%f'.split('.')[0] + '_' + new Date().getTime() + '_%s_%i',
-            folder: 'output',
+            folder: '/static/screenshots',
             size: '320x240'
         })
     })

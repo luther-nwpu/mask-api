@@ -9,14 +9,14 @@ router.prefix('/api/upload')
 
 router.post('/video', async (ctx, next) => {
     const [result, error] = await tryCatch(new Promise(async (resovle: Function, reject: Function) => {
-        mkdirsSync('video/')
+        mkdirsSync('/static/video/')
         const file = ctx.request.files.file
         const reader = fs.createReadStream(file.path)
         const fileNameArr = file.name.split('.')
         const ext = fileNameArr.pop()
         const oldFileName = fileNameArr.join()
         const newFileName = `${oldFileName}_${new Date().getTime()}`
-        const newFileUrl = `video/${newFileName}.${ext}`
+        const newFileUrl = `/static/video/${newFileName}.${ext}`
         const upStream = fs.createWriteStream(newFileUrl)
         reader.pipe(upStream)
         new Video({ name: oldFileName, url: newFileUrl }).save(null, { method: 'insert' }).then(model => {
@@ -34,14 +34,14 @@ router.post('/video', async (ctx, next) => {
 router.post('/firstvideo', async (ctx, next) => {
     const userId = ctx.state['$user'].data
     const [result, error] = await tryCatch(new Promise(async (resolve: Function, reject: Function) => {
-        mkdirsSync('video/')
+        mkdirsSync('/static/video/')
         const file = ctx.request.files.file
         const reader = fs.createReadStream(file.path)
         const fileNameArr = file.name.split('.')
         const ext = fileNameArr.pop()
         const oldFileName = fileNameArr.join()
         const newFileName = `${oldFileName}_${new Date().getTime()}`
-        const newFileUrl = `video/${newFileName}.${ext}`
+        const newFileUrl = `/static/video/${newFileName}.${ext}`
         const upStream = fs.createWriteStream(newFileUrl)
         reader.pipe(upStream)
         const imgs: any = await new Promise(async (resolve, reject) => {
@@ -75,14 +75,14 @@ router.post('/firstvideo', async (ctx, next) => {
 
 router.post('/uploadImg', async (ctx, next) => {
     const [result, error] = await tryCatch(new Promise((resovle: Function, reject: Function) => {
-        mkdirsSync('upload/img/')
+        mkdirsSync('/static/picture/')
         const file = ctx.request.files.file
         const reader = fs.createReadStream(file.path)
         const fileNameArr = file.name.split('.')
         const ext = fileNameArr.pop()
         const oldFileName = fileNameArr.join()
         const newFileName = `${oldFileName}_${new Date().getTime()}`
-        const newFileUrl = `upload/img/${newFileName}.${ext}`
+        const newFileUrl = `/static/picture/${newFileName}.${ext}`
         const upStream = fs.createWriteStream(newFileUrl)
         reader.pipe(upStream)
         new Picture({ name: oldFileName, url: newFileUrl }).save(null, { method: 'insert' }).then(model => {
