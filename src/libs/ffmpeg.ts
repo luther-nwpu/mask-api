@@ -1,6 +1,6 @@
 import * as ffmpeg from 'fluent-ffmpeg'
-ffmpeg.setFfmpegPath('D:/Program Files/ffmpeg-20190323-5fceac1-win64-static/bin/ffmpeg.exe')
-ffmpeg.setFfprobePath('D:/Program Files/ffmpeg-20190323-5fceac1-win64-static/bin/ffprobe.exe')
+// ffmpeg.setFfmpegPath('D:/Program Files/ffmpeg-20190323-5fceac1-win64-static/bin/ffmpeg.exe')
+// ffmpeg.setFfprobePath('D:/Program Files/ffmpeg-20190323-5fceac1-win64-static/bin/ffprobe.exe')
 
 export const returnVideoImg = (videoUrl) => {
     return new Promise((resolve, reject) => {
