@@ -52,7 +52,7 @@ router.post('/firstvideo', async (ctx, next) => {
         const imgArr = []
         const imgIndex = []
         for (let item of imgs) {
-            const newPicture = await Picture.savePicture({ name: item, url: item, user_id: userId })
+            const newPicture = await Picture.savePicture({ name: item, url: `/static/screenshots/${item}`, user_id: userId })
             imgArr.push(newPicture)
             imgIndex.push(newPicture.id)
         }
