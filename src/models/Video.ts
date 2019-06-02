@@ -5,11 +5,11 @@ export const Video = db.Model.extend({
     tableName: 'video',
     hasTimestamps: ['create_at', 'update_at'],
 }, {
-    getVideo: Promise.method((id) => {
+    getVideo: (id) => {
         return new Video().query('where', 'id', '=', id).fetch().then((video) => {
             return video.toJSON()
         })
-    })
+    }
 }) as any
 /**
  * `id` INT NOT NULL,
