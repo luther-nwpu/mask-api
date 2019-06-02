@@ -9,7 +9,7 @@ export const User = db.Model.extend({
 }, {
     getUser: async (id) => {
         return new User({ id }).fetch({ withRelated: ['picture'] }).then(async (result) => {
-            return { ...result.omit('password').toJSON(), picture: await Picture.getPictrue(result.get('picture_id')) }
+            return { ...result.omit('password'), picture: await Picture.getPicture(parseInt(result.get('picture_id'), 10)) }
         })
     }
 }) as any
