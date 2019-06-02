@@ -1,5 +1,4 @@
 import db from '@libs/db'
-import * as Promise from 'bluebird'
 import { Picture } from '@models'
 export const User = db.Model.extend({
     tableName: 'user',
@@ -8,11 +7,11 @@ export const User = db.Model.extend({
         return this.belongsTo(Picture, 'picture_id', 'id')
     }
 }, {
-    getUser: Promise.method((id) => {
-        return new User({ id }).fetch({ withRelated: ['picture'] }).then((result) => {
-            return result && result.omit('password')
+    getUser: async (id) => {
+        return new User({ id }).fetch({ withRelated: ['picture'] }).then(async (result) => {
+            return { ...result.omit('password').toJSON(), picture: await Picture.getPictrue(result.get('picture_id')) }
         })
-    })
+    }
 }) as any
 /**
  * `id` int(11) NOT NULL,
