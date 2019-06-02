@@ -92,10 +92,11 @@ router.get('/getHaiyouById', async (ctx, next) => {
                 History.saveHistory(payload, haiyouId)
             }
             result.save('hot', result.get('hot') + 1)
-            resolve({videoArr: await result.get('video_id').split('_').reduce(async (total, value) => {
-                total.push(await Video.getVideo(value))
-                return total
-            }, []), subscribe: await Subscribe.judgeSubscribe(payload, result.get('user_id')), followNum: await Subscribe.getSubScribeCount(result.get('user_id')), user: await User.getUser(result.get('user_id')), ...result.toJSON()})
+            resolve({videoArr: await result.get('video_id').split('_').reduce(async (total, currentValue) => {
+                const accumulator = await total
+                accumulator.push(await Video.getVideo(parseInt(currentValue, 10)))
+                return Promise.resolve(accumulator)
+            }, Promise.resolve([])), subscribe: await Subscribe.judgeSubscribe(payload, result.get('user_id')), followNum: await Subscribe.getSubScribeCount(result.get('user_id')), user: await User.getUser(result.get('user_id')), ...result.toJSON()})
         })
     }))
     if (error) {
