@@ -150,13 +150,15 @@ router.post('/updateAvator', async (ctx, next) => {
     if (error) {
         return ctx.body = { success: false, result: error }
     }
+    console.log(res['picture'])
+    console.log(res)
     if (res) {
         const userinfo = {
             username: res['username'],
             email: res['email'],
             location: res['location'],
             signature: res['signature'],
-            picture_url:  res['picture'] && res['picture']['url'],
+            picture_url: res['picture'] && res['picture']['url'],
             sex: res['sex'],
             age: res['age'],
             telephone: res['telephone']
