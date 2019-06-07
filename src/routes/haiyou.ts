@@ -119,6 +119,8 @@ router.get('/getHaiyouById', async (ctx, next) => {
                 History.saveHistory(payload, haiyouId)
             }
             result.save('hot', result.get('hot') + 1)
+            console.log('--------------------', result.get('video_id'))
+            console.log('------------------haiyoud', result.get('spare_picture'))
             console.log(await result.get('video_id').split('_').reduce(async (total, currentValue) => {
                 const accumulator = await total
                 accumulator.push(await Video.getVideo(parseInt(currentValue, 10)))
