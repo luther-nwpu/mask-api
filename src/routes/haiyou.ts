@@ -1,6 +1,6 @@
 import * as koaRouter from 'koa-router'
 import { tryCatch } from '@libs/util'
-import { Draft, Haiyou, Video, User, Subscribe, History } from '@models'
+import { Draft, Haiyou, Video, User, Subscribe, History, Picture } from '@models'
 import { JWT_SECRET } from '@config'
 import { verify } from 'jsonwebtoken'
 const router = new koaRouter()
@@ -16,6 +16,33 @@ router.post('/commitHaiyou', async (ctx, next) => {
         })
     }))
     new Draft({ id: draft_id }).destroy()
+    if (error) {
+        return ctx.body = { success: false, result: error }
+    }
+    return ctx.body = { success: true, result: result }
+})
+
+router.post('/updateHaiyou', async (ctx, next) => {
+    const { id, spare_picture, video_id, picture_id, title, type, reprint, partition, label, description, draft_id } = ctx.request.body
+    const [result, error] = await tryCatch(new Promise(async (resolve, reject) => {
+        new Haiyou({ id, spare_picture, video_id, picture_id, title, type, reprint, partition, label, description }).save(null, { method:  'update' }).then((model) => {
+            resolve(model)
+        })
+    }))
+    new Draft({ id: draft_id }).destroy()
+    if (error) {
+        return ctx.body = { success: false, result: error }
+    }
+    return ctx.body = { success: true, result: result }
+})
+
+router.post('/deleteHaiyou', async (ctx, next) => {
+    const { id } = ctx.request.body
+    const [result, error] = await tryCatch(new Promise(async (resovle: Function, reject: Function) => {
+        new Haiyou({ id }).destroy().then((model) => {
+            resovle(model)
+        })
+    }))
     if (error) {
         return ctx.body = { success: false, result: error }
     }
@@ -95,6 +122,10 @@ router.get('/getHaiyouById', async (ctx, next) => {
             resolve({videoArr: await result.get('video_id').split('_').reduce(async (total, currentValue) => {
                 const accumulator = await total
                 accumulator.push(await Video.getVideo(parseInt(currentValue, 10)))
+                return Promise.resolve(accumulator)
+            }, Promise.resolve([])), pictureResult: await (result.get('spare_picture') ? result.get('spare_picture').split('_') : []).reduce(async (total, currentValue) => {
+                const accumulator = await total
+                accumulator.push(await Picture.getPicture(parseInt(currentValue, 10)))
                 return Promise.resolve(accumulator)
             }, Promise.resolve([])), subscribe: await Subscribe.judgeSubscribe(payload, result.get('user_id')), followNum: await Subscribe.getSubScribeCount(result.get('user_id')), user: await User.getUser(result.get('user_id')), ...result.toJSON()})
         })
