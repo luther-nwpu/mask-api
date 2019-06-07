@@ -119,18 +119,6 @@ router.get('/getHaiyouById', async (ctx, next) => {
                 History.saveHistory(payload, haiyouId)
             }
             result.save('hot', result.get('hot') + 1)
-            console.log('--------------------', result.get('video_id'))
-            console.log('------------------haiyoud', result.get('spare_picture'))
-            console.log(await (result.get('video_id') ? result.get('video_id').split('_') : []).reduce(async (total, currentValue) => {
-                const accumulator = await total
-                accumulator.push(await Video.getVideo(parseInt(currentValue, 10)))
-                return Promise.resolve(accumulator)
-            }, Promise.resolve([])))
-            console.log(await (result.get('spare_picture') ? result.get('spare_picture').split('_') : []).reduce(async (total, currentValue) => {
-                const accumulator = await total
-                accumulator.push(await Picture.getPicture(parseInt(currentValue, 10)))
-                return Promise.resolve(accumulator)
-            }, Promise.resolve([])))
             resolve({videoArr: await (result.get('video_id') ? result.get('video_id').split('_') : []).reduce(async (total, currentValue) => {
                 const accumulator = await total
                 accumulator.push(await Video.getVideo(parseInt(currentValue, 10)))
