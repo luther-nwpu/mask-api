@@ -32,7 +32,7 @@
     "ffmpeg": "0.0.4",
     "fluent-ffmpeg": "^2.1.2",
     "http-error": "0.0.6",
-    "jsonwebtoken": "^8.4.0",
+    "jsonwebtoken": "^9.0.0",
     "knex": "^0.14.6",
     "koa": "^2.7.0",
     "koa-body": "^4.0.7",
